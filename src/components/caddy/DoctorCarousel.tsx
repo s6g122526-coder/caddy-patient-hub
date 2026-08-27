@@ -1,7 +1,16 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { BadgeCheck, CalendarCheck, Clock, MapPin, Star } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  BadgeCheck,
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  Star,
+} from "lucide-react";
 import { DOCTORS, type Doctor } from "@/lib/home-data";
+
 
 const spring = { type: "spring" as const, stiffness: 260, damping: 22 };
 
@@ -34,7 +43,7 @@ function DoctorCard({
       viewport={{ once: true, amount: 0.35 }}
       whileHover={{ y: -12, boxShadow: "var(--shadow-card-hover)" }}
       transition={{ ...spring, delay: index * 0.07 }}
-      className="glass-card group relative w-[300px] shrink-0 overflow-hidden rounded-4xl p-6"
+      className="glass-card group relative w-[min(300px,84vw)] shrink-0 snap-center overflow-hidden rounded-4xl p-6 sm:w-[300px]"
     >
       {/* soft gradient wash that blooms on hover */}
       <motion.div
@@ -156,18 +165,37 @@ function DoctorCard({
 
 export function DoctorCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [dragWidth, setDragWidth] = useState(0);
+  const [edges, setEdges] = useState({ start: true, end: false });
   const { scrollXProgress } = useScroll({ container: trackRef, axis: "x" });
+
+  const measure = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setEdges({ start: el.scrollLeft <= 4, end: el.scrollLeft >= max - 4 });
+  }, []);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    const measure = () => setDragWidth(Math.max(0, el.scrollWidth - el.clientWidth));
     measure();
+    el.addEventListener("scroll", measure, { passive: true });
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    return () => {
+      el.removeEventListener("scroll", measure);
+      ro.disconnect();
+    };
+  }, [measure]);
+
+  const scrollBy = (dir: -1 | 1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector("article");
+    const step = (card?.clientWidth ?? 300) + 20;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
 
   return (
     <section className="space-y-5">
@@ -221,7 +249,7 @@ export function DoctorCarousel() {
             }}
             className="max-w-md text-sm text-muted-foreground"
           >
-            Drag sideways — Caddy shuffles the deck for you.
+            Swipe or use the arrows — Caddy shuffles the deck for you.
           </motion.p>
         </div>
 
@@ -237,29 +265,49 @@ export function DoctorCarousel() {
         </motion.span>
       </motion.header>
 
-      <div
-        ref={trackRef}
-        className="no-scrollbar -mx-1 overflow-x-auto px-1 pb-6"
-        style={{ scrollbarWidth: "none" }}
-      >
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: -dragWidth, right: 0 }}
-          dragElastic={0.12}
-          dragMomentum
-          className="flex cursor-grab items-stretch gap-5 active:cursor-grabbing"
+      <div className="relative">
+        <div
+          ref={trackRef}
+          className="no-scrollbar -mx-1 snap-x snap-mandatory scroll-px-1 overflow-x-auto px-1 pb-6"
+          style={{ scrollbarWidth: "none" }}
         >
-          {DOCTORS.map((d, i) => (
-            <DoctorCard
-              key={d.id}
-              doctor={d}
-              index={i}
-              total={DOCTORS.length}
-              progress={scrollXProgress}
-            />
-          ))}
-        </motion.div>
+          <div className="flex items-stretch gap-5">
+            {DOCTORS.map((d, i) => (
+              <DoctorCard
+                key={d.id}
+                doctor={d}
+                index={i}
+                total={DOCTORS.length}
+                progress={scrollXProgress}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* scroll arrows */}
+        {([-1, 1] as const).map((dir) => {
+          const disabled = dir === -1 ? edges.start : edges.end;
+          const Icon = dir === -1 ? ChevronLeft : ChevronRight;
+          return (
+            <motion.button
+              key={dir}
+              type="button"
+              onClick={() => scrollBy(dir)}
+              disabled={disabled}
+              aria-label={dir === -1 ? "Previous doctors" : "Next doctors"}
+              whileHover={{ scale: disabled ? 1 : 1.08 }}
+              whileTap={{ scale: disabled ? 1 : 0.94 }}
+              transition={{ type: "spring", stiffness: 460, damping: 18 }}
+              className={`glass-card absolute top-1/2 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full text-foreground sm:grid ${
+                dir === -1 ? "-left-3" : "-right-3"
+              } ${disabled ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            >
+              <Icon aria-hidden className="size-5" />
+            </motion.button>
+          );
+        })}
       </div>
+
     </section>
   );
 }
