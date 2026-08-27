@@ -159,22 +159,27 @@ function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ type: "spring", stiffness: 150, damping: 18 }}
-          className="glass-card mt-16 overflow-hidden rounded-4xl p-8 text-center"
+          className="glass-card mt-16 grid items-center gap-8 overflow-hidden rounded-4xl p-8 lg:grid-cols-[1fr_0.9fr]"
         >
-          <h2 className="text-3xl font-extrabold">Caddy is listening</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            Say the symptom, Caddy books the specialist. Voice booking arrives with your first visit.
-          </p>
-          <motion.button
-            type="button"
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 4 }}
-            transition={{ type: "spring", stiffness: 500, damping: 18 }}
-            className="btn-3d mt-6 rounded-full bg-primary px-7 py-3 text-sm font-bold text-primary-foreground"
-          >
-            Talk to Caddy
-          </motion.button>
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-extrabold">Caddy is listening</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground lg:mx-0">
+              Say the symptom, Caddy rings the right specialist and holds the line — voice booking
+              arrives with your first visit.
+            </p>
+            <motion.button
+              type="button"
+              whileHover={{ y: -2 }}
+              whileTap={{ y: 4 }}
+              transition={{ type: "spring", stiffness: 500, damping: 18 }}
+              className="btn-3d mt-6 rounded-full bg-primary px-7 py-3 text-sm font-bold text-primary-foreground"
+            >
+              Talk to Caddy
+            </motion.button>
+          </div>
+          <CallDoctorAnimation className="mx-auto" />
         </motion.section>
+
       </div>
 
       <SiteFooter />
