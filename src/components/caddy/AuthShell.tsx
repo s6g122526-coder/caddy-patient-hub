@@ -2,7 +2,7 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { Link } from "@tanstack/react-router";
 import { Stethoscope } from "lucide-react";
 import type { ReactNode } from "react";
-import { OrbStage } from "./OrbStage";
+import { DoctorCallStage } from "./DoctorCallStage";
 
 /**
  * Shared split layout for /login and /signup:
@@ -53,7 +53,7 @@ export function AuthShell({
       </div>
 
       <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-8 px-5 py-10 sm:px-8 lg:grid-cols-2">
-        {/* brand + orb */}
+        {/* brand + doctor call visual */}
         <div className="flex flex-col justify-center">
           <motion.div
             initial={{ opacity: 0, y: -18 }}
@@ -73,7 +73,7 @@ export function AuthShell({
             </Link>
           </motion.div>
 
-          <OrbStage className="mx-auto aspect-square w-full max-w-[420px]" />
+          <DoctorCallStage className="mx-auto mt-4" />
 
           <motion.div
             initial={{ opacity: 0, y: 24 }}
