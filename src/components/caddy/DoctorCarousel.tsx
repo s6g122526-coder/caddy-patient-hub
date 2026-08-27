@@ -43,7 +43,7 @@ function DoctorCard({
       viewport={{ once: true, amount: 0.35 }}
       whileHover={{ y: -12, boxShadow: "var(--shadow-card-hover)" }}
       transition={{ ...spring, delay: index * 0.07 }}
-      className="glass-card group relative w-[300px] shrink-0 overflow-hidden rounded-4xl p-6"
+      className="glass-card group relative w-[min(300px,84vw)] shrink-0 snap-center overflow-hidden rounded-4xl p-6 sm:w-[300px]"
     >
       {/* soft gradient wash that blooms on hover */}
       <motion.div
