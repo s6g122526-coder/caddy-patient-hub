@@ -265,29 +265,49 @@ export function DoctorCarousel() {
         </motion.span>
       </motion.header>
 
-      <div
-        ref={trackRef}
-        className="no-scrollbar -mx-1 overflow-x-auto px-1 pb-6"
-        style={{ scrollbarWidth: "none" }}
-      >
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: -dragWidth, right: 0 }}
-          dragElastic={0.12}
-          dragMomentum
-          className="flex cursor-grab items-stretch gap-5 active:cursor-grabbing"
+      <div className="relative">
+        <div
+          ref={trackRef}
+          className="no-scrollbar -mx-1 snap-x snap-mandatory scroll-px-1 overflow-x-auto px-1 pb-6"
+          style={{ scrollbarWidth: "none" }}
         >
-          {DOCTORS.map((d, i) => (
-            <DoctorCard
-              key={d.id}
-              doctor={d}
-              index={i}
-              total={DOCTORS.length}
-              progress={scrollXProgress}
-            />
-          ))}
-        </motion.div>
+          <div className="flex items-stretch gap-5">
+            {DOCTORS.map((d, i) => (
+              <DoctorCard
+                key={d.id}
+                doctor={d}
+                index={i}
+                total={DOCTORS.length}
+                progress={scrollXProgress}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* scroll arrows */}
+        {([-1, 1] as const).map((dir) => {
+          const disabled = dir === -1 ? edges.start : edges.end;
+          const Icon = dir === -1 ? ChevronLeft : ChevronRight;
+          return (
+            <motion.button
+              key={dir}
+              type="button"
+              onClick={() => scrollBy(dir)}
+              disabled={disabled}
+              aria-label={dir === -1 ? "Previous doctors" : "Next doctors"}
+              whileHover={{ scale: disabled ? 1 : 1.08 }}
+              whileTap={{ scale: disabled ? 1 : 0.94 }}
+              transition={{ type: "spring", stiffness: 460, damping: 18 }}
+              className={`glass-card absolute top-1/2 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full text-foreground sm:grid ${
+                dir === -1 ? "-left-3" : "-right-3"
+              } ${disabled ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            >
+              <Icon aria-hidden className="size-5" />
+            </motion.button>
+          );
+        })}
       </div>
+
     </section>
   );
 }
