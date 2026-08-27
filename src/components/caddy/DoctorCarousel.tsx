@@ -165,18 +165,37 @@ function DoctorCard({
 
 export function DoctorCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [dragWidth, setDragWidth] = useState(0);
+  const [edges, setEdges] = useState({ start: true, end: false });
   const { scrollXProgress } = useScroll({ container: trackRef, axis: "x" });
+
+  const measure = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setEdges({ start: el.scrollLeft <= 4, end: el.scrollLeft >= max - 4 });
+  }, []);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    const measure = () => setDragWidth(Math.max(0, el.scrollWidth - el.clientWidth));
     measure();
+    el.addEventListener("scroll", measure, { passive: true });
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    return () => {
+      el.removeEventListener("scroll", measure);
+      ro.disconnect();
+    };
+  }, [measure]);
+
+  const scrollBy = (dir: -1 | 1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector("article");
+    const step = (card?.clientWidth ?? 300) + 20;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
 
   return (
     <section className="space-y-5">
