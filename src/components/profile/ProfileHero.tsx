@@ -117,7 +117,7 @@ export function ProfileHero({ patient }: { patient: Patient }) {
       </div>
 
       {/* 3D Caddy companion */}
-      <ProfileCaddy className="pointer-events-none absolute -bottom-6 right-0 size-40 sm:size-56 lg:size-64" />
+      <ProfileCaddy className="pointer-events-none absolute -top-2 right-0 size-24 opacity-90 sm:-bottom-6 sm:top-auto sm:size-56 sm:opacity-100 lg:size-64" />
     </motion.section>
   );
 }
