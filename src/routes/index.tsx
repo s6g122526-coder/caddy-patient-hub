@@ -90,7 +90,7 @@ function Home() {
                 transition={{ type: "spring", stiffness: 500, damping: 18 }}
               >
                 <Link
-                  to="/onboarding"
+                  to="/signup"
                   className="btn-3d block rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground"
                 >
                   Book an appointment
