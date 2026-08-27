@@ -433,7 +433,7 @@ export const POPULATED: ProfileMock = {
 
 export const NEW_PATIENT: ProfileMock = {
   patient: {
-    name: "Bilal Ahsan",
+    name: "Zoya Hameed",
     memberSince: "Joined today",
     tier: "New Patient",
     avatar: patientAvatar,
@@ -468,7 +468,7 @@ export function getProfileMock(state: MockState): ProfileMock {
 export const STREAK_COPY = (days: number) => {
   if (days >= 14) return "Two weeks strong — Caddy is genuinely showing off about you.";
   if (days >= 7) return "A full week logged. This is the habit sticking, not luck.";
-  if (days >= 3) return "Three days in a row. Momentum looks good on you.";
+  if (days >= 3) return `${days} days in a row. Momentum looks good on you.`;
   if (days >= 1) return "Streak started. Log tomorrow and Caddy will keep the flame lit.";
   return "No streak yet — one check-in is all it takes to start one.";
 };
