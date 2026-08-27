@@ -1,7 +1,16 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { BadgeCheck, CalendarCheck, Clock, MapPin, Star } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  BadgeCheck,
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  Star,
+} from "lucide-react";
 import { DOCTORS, type Doctor } from "@/lib/home-data";
+
 
 const spring = { type: "spring" as const, stiffness: 260, damping: 22 };
 
