@@ -6,6 +6,8 @@ import { SpecializationPills } from "@/components/caddy/SpecializationPills";
 import { DoctorCarousel } from "@/components/caddy/DoctorCarousel";
 import { QueueTeaser } from "@/components/caddy/QueueTeaser";
 import { SiteFooter } from "@/components/caddy/SiteFooter";
+import { CallDoctorAnimation } from "@/components/caddy/CallDoctorAnimation";
+
 import { Link } from "@tanstack/react-router";
 
 
