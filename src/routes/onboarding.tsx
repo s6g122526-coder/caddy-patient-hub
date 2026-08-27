@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { GlassField } from "@/components/caddy/AuthShell";
+import { GlassField } from "@/components/caddy/GlassField";
 import { OrbStage } from "@/components/caddy/OrbStage";
 import { useCaddy } from "@/lib/caddy-context";
 import { EMPTY_PROFILE, type CaddyProfile } from "@/lib/caddy-store";

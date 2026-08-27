@@ -249,7 +249,7 @@ export function DoctorCarousel() {
             }}
             className="max-w-md text-sm text-muted-foreground"
           >
-            Drag sideways — Caddy shuffles the deck for you.
+            Swipe or use the arrows — Caddy shuffles the deck for you.
           </motion.p>
         </div>
 
