@@ -68,13 +68,12 @@ export function SiteNav() {
           transition={{ type: "spring", stiffness: 500, damping: 18 }}
         >
           <Link
-            to="/queue"
+            to="/login"
             className="btn-3d block rounded-full bg-primary px-5 py-2 text-sm font-extrabold text-primary-foreground"
           >
-            Live queue
+            Sign in
           </Link>
         </motion.div>
-
         <motion.button
           type="button"
           aria-label="Open menu"
