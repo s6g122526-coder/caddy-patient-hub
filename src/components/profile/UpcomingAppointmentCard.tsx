@@ -45,9 +45,12 @@ export function UpcomingAppointmentCard({ appointment }: { appointment: Appointm
   const live = appointment?.checkedInToday ?? false;
   useEffect(() => {
     if (!live || calm) return;
-    const id = setInterval(() => setPosition((p) => (p <= 1 ? 4 : p - 1)), 5000);
+    const id = setInterval(
+      () => setPosition((p) => (p <= 1 ? (appointment?.queuePosition ?? QUEUE_POSITION) : p - 1)),
+      5000,
+    );
     return () => clearInterval(id);
-  }, [live, calm]);
+  }, [live, calm, appointment?.queuePosition]);
 
   if (!appointment) {
     return (
@@ -140,7 +143,7 @@ export function UpcomingAppointmentCard({ appointment }: { appointment: Appointm
                 <span className="font-hero text-4xl text-primary-foreground">{shown}</span>
               </motion.div>
               <p className="mt-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                in queue
+                your place in line
               </p>
             </div>
             <div className="space-y-1 text-sm">
@@ -152,7 +155,7 @@ export function UpcomingAppointmentCard({ appointment }: { appointment: Appointm
                 />
                 Checked in
               </p>
-              <p className="font-bold">~{Math.max(4, shown * 6)} min wait</p>
+              <p className="font-bold">~{waitMinutes(Math.max(0, shown - 1))} min wait</p>
               <p className="text-muted-foreground">
                 {appointment.room} · {appointment.token}
               </p>

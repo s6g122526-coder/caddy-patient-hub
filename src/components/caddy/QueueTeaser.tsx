@@ -1,10 +1,10 @@
 import { motion, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
-import { DOCTORS } from "@/lib/home-data";
+import { LIVE_VISIT, QUEUE_POSITION, waitMinutes } from "@/lib/live-visit";
 
 export function QueueTeaser() {
-  const [position, setPosition] = useState(5);
-  const spring = useSpring(5, { stiffness: 90, damping: 14, mass: 0.9 });
+  const [position, setPosition] = useState(QUEUE_POSITION);
+  const spring = useSpring(QUEUE_POSITION, { stiffness: 90, damping: 14, mass: 0.9 });
   const rounded = useTransform(spring, (v) => Math.max(1, Math.round(v)));
 
   useEffect(() => {
@@ -12,11 +12,9 @@ export function QueueTeaser() {
   }, [position, spring]);
 
   useEffect(() => {
-    const id = setInterval(() => setPosition((p) => (p <= 1 ? 5 : p - 1)), 4200);
+    const id = setInterval(() => setPosition((p) => (p <= 1 ? QUEUE_POSITION : p - 1)), 4200);
     return () => clearInterval(id);
   }, []);
-
-  const doctor = DOCTORS[0]!;
 
   return (
     <motion.section
@@ -45,7 +43,7 @@ export function QueueTeaser() {
           </div>
           <h2 className="mt-2 text-2xl font-extrabold">You&apos;re almost in</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {doctor.name} · {doctor.clinic} · {doctor.next}
+            {LIVE_VISIT.doctor} · {LIVE_VISIT.clinic} · {LIVE_VISIT.date}, {LIVE_VISIT.time}
           </p>
         </div>
 
@@ -62,12 +60,14 @@ export function QueueTeaser() {
               </motion.span>
             </motion.div>
             <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              in queue
+your place in line
             </p>
           </div>
           <div className="space-y-1 text-sm">
-            <p className="font-bold">~12 min wait</p>
-            <p className="text-muted-foreground">Room 3 · Token A-24</p>
+            <p className="font-bold">~{waitMinutes(position - 1)} min wait</p>
+            <p className="text-muted-foreground">
+              {LIVE_VISIT.room} · Token {LIVE_VISIT.token}
+            </p>
             <motion.button
               type="button"
               whileHover={{ scale: 1.04 }}
