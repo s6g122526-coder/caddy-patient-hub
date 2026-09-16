@@ -2,6 +2,7 @@ import doc1 from "@/assets/doc-1.jpg";
 import doc2 from "@/assets/doc-2.jpg";
 import doc3 from "@/assets/doc-3.jpg";
 import doc4 from "@/assets/doc-4.jpg";
+import { formatFee } from "@/lib/live-visit";
 
 export type Specialization = {
   id: string;
@@ -40,7 +41,7 @@ export const DOCTORS: Doctor[] = [
     specialty: "Dentist",
     clinic: "Caddy Smile Studio",
     rating: 4.9,
-    fee: "$28",
+    fee: formatFee(2800),
     next: "Today 4:30 PM",
     experience: "9 yrs",
     bio: "Gentle cosmetic and restorative dentistry — veneers, whitening and painless root canals with same-day crowns.",
@@ -53,7 +54,7 @@ export const DOCTORS: Doctor[] = [
     specialty: "General Physician",
     clinic: "Northside Care Clinic",
     rating: 4.8,
-    fee: "$22",
+    fee: formatFee(2200),
     next: "Today 6:00 PM",
     experience: "12 yrs",
     bio: "Everyday illness, fever, diabetes and blood-pressure management with clear follow-up plans and lab reviews.",
@@ -66,7 +67,7 @@ export const DOCTORS: Doctor[] = [
     specialty: "Dermatologist",
     clinic: "Glow Skin Lab",
     rating: 4.7,
-    fee: "$34",
+    fee: formatFee(3400),
     next: "Tomorrow 11:00 AM",
     experience: "7 yrs",
     bio: "Acne, pigmentation and hair-fall treatment plans built around your skin type, plus laser and peel sessions.",
@@ -79,7 +80,7 @@ export const DOCTORS: Doctor[] = [
     specialty: "Pediatrician",
     clinic: "Little Hearts Clinic",
     rating: 5.0,
-    fee: "$26",
+    fee: formatFee(2600),
     next: "Tomorrow 9:15 AM",
     experience: "15 yrs",
     bio: "Newborn checkups, vaccinations and growth tracking — calm consults that parents actually leave reassured by.",
