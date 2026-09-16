@@ -6,6 +6,12 @@ import { NotificationBell } from "@/components/caddy/NotificationCenter";
 import { OrbStage } from "@/components/caddy/OrbStage";
 import { SiteFooter } from "@/components/caddy/SiteFooter";
 import { useCaddy } from "@/lib/caddy-context";
+import {
+  LIVE_VISIT,
+  QUEUE_BOARD,
+  leaveHomeInMinutes,
+  waitMinutes,
+} from "@/lib/live-visit";
 
 export const Route = createFileRoute("/queue")({
   head: () => ({
@@ -28,14 +34,7 @@ export const Route = createFileRoute("/queue")({
 
 const spring = { type: "spring" as const, stiffness: 170, damping: 20 };
 
-const PEOPLE = [
-  { token: "A-21", name: "Bilal A.", reason: "BP review" },
-  { token: "A-22", name: "Sara N.", reason: "Migraine follow-up" },
-  { token: "A-23", name: "Hamza I.", reason: "Sugar check" },
-  { token: "A-24", name: "You", reason: "Dental cleaning" },
-  { token: "A-25", name: "Nida F.", reason: "Skin consult" },
-  { token: "A-26", name: "Rehan K.", reason: "Vaccination" },
-];
+const PEOPLE = QUEUE_BOARD;
 
 function QueuePage() {
   const calm = useReducedMotion();
@@ -46,12 +45,12 @@ function QueuePage() {
 
   const posSpring = useSpring(position, { stiffness: 90, damping: 14, mass: 0.9 });
   const rounded = useTransform(posSpring, (v) => Math.max(1, Math.round(v)));
-  const waitSpring = useSpring(position * 6, { stiffness: 80, damping: 16 });
-  const wait = useTransform(waitSpring, (v) => `${Math.max(1, Math.round(v))} min`);
+  const waitSpring = useSpring(waitMinutes(myIndex), { stiffness: 80, damping: 16 });
+  const wait = useTransform(waitSpring, (v) => `${Math.max(2, Math.round(v))} min`);
 
   useEffect(() => {
     posSpring.set(position);
-    waitSpring.set(position * 6);
+    waitSpring.set(waitMinutes(Math.max(0, position - 1)));
   }, [position, posSpring, waitSpring]);
 
   useEffect(() => {
@@ -65,7 +64,7 @@ function QueuePage() {
     if (position === 2) {
       pushNotification({
         title: "You're next but one",
-        body: "Head to Room 3 — Caddy will call your token in about 6 minutes.",
+        body: `Head to ${LIVE_VISIT.room} — Caddy will call your token in about ${waitMinutes(1)} minutes.`,
         kind: "queue",
       });
     }
@@ -111,10 +110,11 @@ function QueuePage() {
                 animate={calm ? {} : { scale: [1, 1.7, 1], opacity: [1, 0.35, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
-              Caddy Smile Studio · Room 3
+              {LIVE_VISIT.clinic} · {LIVE_VISIT.room}
             </div>
             <h1 className="mt-3 font-display text-4xl font-extrabold sm:text-5xl">
-              Token <span className="foil-text foil-animate">A-24</span> — you&apos;re moving up
+              Token <span className="foil-text foil-animate">{LIVE_VISIT.token}</span> —
+              you&apos;re moving up
             </h1>
 
             <div className="mt-7 flex flex-wrap items-center gap-5">
@@ -144,7 +144,7 @@ function QueuePage() {
                 </Stat>
                 <Stat icon={MapPin} label="Leave home in">
                   <span className="font-display text-xl font-extrabold">
-                    {Math.max(0, position * 6 - 14)} min
+                    {leaveHomeInMinutes(Math.max(0, position - 1))} min
                   </span>
                 </Stat>
               </div>

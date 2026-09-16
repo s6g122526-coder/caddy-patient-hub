@@ -3,6 +3,7 @@ import doc2 from "@/assets/doc-2.jpg";
 import doc3 from "@/assets/doc-3.jpg";
 import doc4 from "@/assets/doc-4.jpg";
 import patientAvatar from "@/assets/patient-avatar.jpg";
+import { LIVE_VISIT, QUEUE_POSITION } from "@/lib/live-visit";
 
 /**
  * Front-end only mock data for the Patient Profile screen.
@@ -176,16 +177,16 @@ export const POPULATED: ProfileMock = {
   bestStreak: 23,
   appointment: {
     id: "a1",
-    doctor: "Dr. Aisha Rahman",
-    specialty: "Dentist · Caddy Smile Studio",
-    clinic: "Caddy Smile Studio",
+    doctor: LIVE_VISIT.doctor,
+    specialty: `${LIVE_VISIT.specialty} · ${LIVE_VISIT.clinic}`,
+    clinic: LIVE_VISIT.clinic,
     photo: doc1,
-    date: "Today, 17 Aug",
-    time: "4:30 PM",
+    date: LIVE_VISIT.date,
+    time: LIVE_VISIT.time,
     checkedInToday: true,
-    queuePosition: 3,
-    room: "Room 3",
-    token: "Token A-24",
+    queuePosition: QUEUE_POSITION,
+    room: LIVE_VISIT.room,
+    token: `Token ${LIVE_VISIT.token}`,
   },
   visits: [
     {
