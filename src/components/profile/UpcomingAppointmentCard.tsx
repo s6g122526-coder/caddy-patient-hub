@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { CalendarPlus, CalendarX2, Clock, RefreshCw, Stethoscope } from "lucide-react";
 import type { Appointment } from "@/lib/profile-data";
+import { QUEUE_POSITION, waitMinutes } from "@/lib/live-visit";
 
 function GlassPill({
   children,
